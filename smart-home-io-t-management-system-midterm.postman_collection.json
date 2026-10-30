@@ -1,0 +1,508 @@
+{
+  "info": {
+    "_postman_id": "70379e94-5648-414e-9b54-04dbe2576db5",
+    "name": "smart-home-io-t-management-system-midterm.postman_collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58577039",
+    "_collection_link": "https://go.postman.co/collection/58577039-70379e94-5648-414e-9b54-04dbe2576db5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "A2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/smart-devices/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "smart-devices",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "B1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/smart-devices/by-brand?brand=xiaomi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "smart-devices",
+            "by-brand"
+          ],
+          "query": [
+            {
+              "key": "brand",
+              "value": "xiaomi"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "B2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/by-status?status=PLANNED",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "by-status"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "PLANNED"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "B3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"actionDate\": \"2026-10-31\",\r\n  \"status\": \"PLANNED\",\r\n  \"command\": \"Turn on smart bulb\",\r\n  \"smartDevice\": {\r\n    \"id\": \"65a38eb9-1609-4a2c-8db0-6725eece5e25\"\r\n  },\r\n  \"controller\": {\r\n    \"id\": \"dc654dbb-e80e-4b96-92e9-66882cda284d\"\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/between?start=2026-10-01&end=2026-10-31",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "between"
+          ],
+          "query": [
+            {
+              "key": "start",
+              "value": "2026-10-01"
+            },
+            {
+              "key": "end",
+              "value": "2026-10-31"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/controllers/by-protocol?name=wifi",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "controllers",
+            "by-protocol"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "wifi"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/rooms/free",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "rooms",
+            "free"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/protocols/unused",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "protocols",
+            "unused"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C4",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/smart-devices/of-controller/dc654dbb-e80e-4b96-92e9-66882cda284d",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "smart-devices",
+            "of-controller",
+            "dc654dbb-e80e-4b96-92e9-66882cda284d"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "D1",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"actionDate\": \"2026-11-30\",\r\n  \"status\": \"EXECUTED\",\r\n  \"command\": \"Demo action\",\r\n  \"smartDevice\": {\r\n    \"id\": \"65a38eb9-1609-4a2c-8db0-6725eece5e25\"\r\n  },\r\n  \"controller\": {\r\n    \"id\": \"dc654dbb-e80e-4b96-92e9-66882cda284d\"\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/save",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "save"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "D2",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/52a55070-0dea-4f83-9589-cce32719b2d7/status?status=QUEUED",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "52a55070-0dea-4f83-9589-cce32719b2d7",
+            "status"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "QUEUED"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "D3",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/controllers/dc654dbb-e80e-4b96-92e9-66882cda284d/protocols/677b76f2-8173-4008-bb23-c5de3f2846dc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "controllers",
+            "dc654dbb-e80e-4b96-92e9-66882cda284d",
+            "protocols",
+            "677b76f2-8173-4008-bb23-c5de3f2846dc"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "D4",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/rooms/free",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "rooms",
+            "free"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E1",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"metric\": \"Temperature\",\r\n  \"note\": \"Reading taken after the heater switched on\",\r\n  \"value\": 24\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8082/api/status-readings/save?scheduledActionId=c0779544-b29c-4ccd-a03a-3764ba6e04cc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "status-readings",
+            "save"
+          ],
+          "query": [
+            {
+              "key": "scheduledActionId",
+              "value": "c0779544-b29c-4ccd-a03a-3764ba6e04cc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/status-readings/smart-device/SN-7F3A9C21",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "status-readings",
+            "smart-device",
+            "SN-7F3A9C21"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E3",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/status-readings/delete/81283ac0-a3d1-4ed4-b8e5-53accfb4b98b",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "status-readings",
+            "delete",
+            "81283ac0-a3d1-4ed4-b8e5-53accfb4b98b"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "F1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/stats/by-status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "stats",
+            "by-status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "F2",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/cancel-day?controllerId=dc654dbb-e80e-4b96-92e9-66882cda284d&date=2026-10-20",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "cancel-day"
+          ],
+          "query": [
+            {
+              "key": "controllerId",
+              "value": "dc654dbb-e80e-4b96-92e9-66882cda284d"
+            },
+            {
+              "key": "date",
+              "value": "2026-10-20"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bonus-1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/dashboard/summary",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "dashboard",
+            "summary"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bonus-2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/api/scheduled-actions/page?page=0&size=5&sort=actionDate,desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "api",
+            "scheduled-actions",
+            "page"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "5"
+            },
+            {
+              "key": "sort",
+              "value": "actionDate,desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
