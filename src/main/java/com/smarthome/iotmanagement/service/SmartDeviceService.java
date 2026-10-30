@@ -58,4 +58,13 @@ public class SmartDeviceService {
     public List<SmartDevice> getSmartDevicesByBrand(String brand) {
         return smartDeviceRepository.findByBrandIgnoreCaseOrderByDeviceNameAsc(brand);
     }
+
+    // C4
+    public List<SmartDevice> getSmartDevicesOfController(UUID controllerId) {
+        return smartDeviceRepository.findDevicesOfController(controllerId);
+    }
+
+    public boolean controllerExists(UUID controllerId) {
+        return controllerRepository.existsById(controllerId);
+    }
 }

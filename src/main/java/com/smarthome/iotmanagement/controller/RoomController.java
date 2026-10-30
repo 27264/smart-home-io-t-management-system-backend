@@ -30,6 +30,12 @@ public class RoomController {
         return new ResponseEntity<>(roomService.getAllRooms(), HttpStatus.OK);
     }
 
+    // C2
+    @GetMapping("/free")
+    public ResponseEntity<List<Room>> getFreeRooms() {
+        return new ResponseEntity<>(roomService.getFreeRooms(), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable UUID id) {
         Optional<Room> room = roomService.getRoomById(id);

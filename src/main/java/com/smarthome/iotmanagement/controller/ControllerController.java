@@ -30,6 +30,12 @@ public class ControllerController {
         return new ResponseEntity<>(controllerService.getAllControllers(), HttpStatus.OK);
     }
 
+    // C1
+    @GetMapping("/by-protocol")
+    public ResponseEntity<List<Controller>> getControllersByProtocol(@RequestParam String name) {
+        return new ResponseEntity<>(controllerService.getControllersByProtocol(name), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getControllerById(@PathVariable UUID id) {
         Optional<Controller> controller = controllerService.getControllerById(id);

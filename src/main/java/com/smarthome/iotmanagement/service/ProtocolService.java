@@ -24,6 +24,11 @@ public class ProtocolService {
         return protocolRepository.findAll();
     }
 
+    // C3
+    public List<Protocol> getUnusedProtocols() {
+        return protocolRepository.findUnusedProtocols();
+    }
+
     public Optional<Protocol> getProtocolById(UUID id) {
         return protocolRepository.findById(id);
     }

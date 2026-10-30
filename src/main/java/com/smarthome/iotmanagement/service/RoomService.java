@@ -46,4 +46,9 @@ public class RoomService {
         roomRepository.deleteById(id);
         return "Room deleted successfully";
     }
+
+    // C2
+    public List<Room> getFreeRooms() {
+        return roomRepository.findFreeRooms();
+    }
 }

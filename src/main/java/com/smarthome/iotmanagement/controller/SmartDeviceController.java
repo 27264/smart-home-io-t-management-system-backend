@@ -36,6 +36,15 @@ public class SmartDeviceController {
         return new ResponseEntity<>(smartDeviceService.getSmartDevicesByBrand(brand), HttpStatus.OK);
     }
 
+    // C4
+    @GetMapping("/of-controller/{controllerId}")
+    public ResponseEntity<?> getDevicesOfController(@PathVariable UUID controllerId) {
+        if (!smartDeviceService.controllerExists(controllerId)) {
+            return new ResponseEntity<>("The controller with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(smartDeviceService.getSmartDevicesOfController(controllerId), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getSmartDeviceById(@PathVariable UUID id) {
         Optional<SmartDevice> smartDevice = smartDeviceService.getSmartDeviceById(id);

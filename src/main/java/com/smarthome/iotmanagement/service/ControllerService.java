@@ -95,4 +95,9 @@ public class ControllerService {
         controllerRepository.deleteById(id);
         return "Controller deleted successfully";
     }
+
+    // C1
+    public List<Controller> getControllersByProtocol(String name) {
+        return controllerRepository.findControllersByProtocolName(name);
+    }
 }

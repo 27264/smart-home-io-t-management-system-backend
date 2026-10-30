@@ -30,6 +30,12 @@ public class ProtocolController {
         return new ResponseEntity<>(protocolService.getAllProtocols(), HttpStatus.OK);
     }
 
+    // C3
+    @GetMapping("/unused")
+    public ResponseEntity<List<Protocol>> getUnusedProtocols() {
+        return new ResponseEntity<>(protocolService.getUnusedProtocols(), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProtocolById(@PathVariable UUID id) {
         Optional<Protocol> protocol = protocolService.getProtocolById(id);
