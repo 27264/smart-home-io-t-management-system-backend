@@ -30,6 +30,12 @@ public class SmartDeviceController {
         return new ResponseEntity<>(smartDeviceService.getAllSmartDevices(), HttpStatus.OK);
     }
 
+    // B1
+    @GetMapping("/by-brand")
+    public ResponseEntity<List<SmartDevice>> getSmartDevicesByBrand(@RequestParam String brand) {
+        return new ResponseEntity<>(smartDeviceService.getSmartDevicesByBrand(brand), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getSmartDeviceById(@PathVariable UUID id) {
         Optional<SmartDevice> smartDevice = smartDeviceService.getSmartDeviceById(id);

@@ -53,4 +53,9 @@ public class SmartDeviceService {
         smartDeviceRepository.deleteById(id);
         return "Smart device deleted successfully";
     }
+
+    // B1 - DERIVED
+    public List<SmartDevice> getSmartDevicesByBrand(String brand) {
+        return smartDeviceRepository.findByBrandIgnoreCaseOrderByDeviceNameAsc(brand);
+    }
 }

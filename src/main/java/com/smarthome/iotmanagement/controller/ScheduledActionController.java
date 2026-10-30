@@ -1,11 +1,13 @@
 package com.smarthome.iotmanagement.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.smarthome.iotmanagement.model.ActionStatus;
 import com.smarthome.iotmanagement.model.ScheduledAction;
 import com.smarthome.iotmanagement.service.ScheduledActionService;
 
@@ -28,6 +30,20 @@ public class ScheduledActionController {
     @GetMapping("/all")
     public ResponseEntity<List<ScheduledAction>> getAllScheduledActions() {
         return new ResponseEntity<>(scheduledActionService.getAllScheduledActions(), HttpStatus.OK);
+    }
+
+    // B2 - FIND BY STATUS
+    @GetMapping("/by-status")
+    public ResponseEntity<List<ScheduledAction>> getScheduledActionsByStatus(@RequestParam ActionStatus status) {
+        return new ResponseEntity<>(scheduledActionService.getScheduledActionsByStatus(status), HttpStatus.OK);
+    }
+
+    // B3 - FIND BETWEEN DATES
+    @GetMapping("/between")
+    public ResponseEntity<List<ScheduledAction>> getScheduledActionsBetweenDates(@RequestParam String start, @RequestParam String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+        return new ResponseEntity<>(scheduledActionService.getScheduledActionsBetweenDates(startDate, endDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

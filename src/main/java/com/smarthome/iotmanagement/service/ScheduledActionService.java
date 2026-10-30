@@ -1,9 +1,11 @@
 package com.smarthome.iotmanagement.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import com.smarthome.iotmanagement.model.ActionStatus;
 import com.smarthome.iotmanagement.model.ScheduledAction;
 import com.smarthome.iotmanagement.model.SmartDevice;
 import com.smarthome.iotmanagement.model.Controller;
@@ -73,5 +75,15 @@ public class ScheduledActionService {
         }
         scheduledActionRepository.deleteById(id);
         return "Scheduled action deleted successfully";
+    }
+
+    // B2 - FIND BY STATUS
+    public List<ScheduledAction> getScheduledActionsByStatus(ActionStatus status) {
+        return scheduledActionRepository.findByStatusOrderByActionDateAsc(status);
+    }
+
+    // B3 - FIND BETWEEN DATES
+    public List<ScheduledAction> getScheduledActionsBetweenDates(LocalDate start, LocalDate end) {
+        return scheduledActionRepository.findByActionDateBetweenOrderByActionDateAsc(start, end);
     }
 }
