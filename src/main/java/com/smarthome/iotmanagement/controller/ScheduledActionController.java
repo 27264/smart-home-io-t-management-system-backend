@@ -21,7 +21,6 @@ public class ScheduledActionController {
         this.scheduledActionService = scheduledActionService;
     }
 
-    // D1 - SAFE SAVE
     @PostMapping("/save")
     public ResponseEntity<String> saveScheduledAction(@RequestBody ScheduledAction scheduledAction) {
         if (scheduledAction.getActionDate().isBefore(LocalDate.now())) {
@@ -55,7 +54,6 @@ public class ScheduledActionController {
         return new ResponseEntity<>(scheduledActionService.getScheduledActionsBetweenDates(startDate, endDate), HttpStatus.OK);
     }
 
-    // D2 - CHANGE STATUS
     @PatchMapping("/{id}/status")
     public ResponseEntity<String> changeStatus(@PathVariable UUID id, @RequestParam ActionStatus status) {
         String result = scheduledActionService.changeStatus(id, status);
@@ -86,12 +84,16 @@ public class ScheduledActionController {
         return new ResponseEntity<>(scheduledAction, HttpStatus.OK);
     }
 
+    // E3 - DELETE WITH STATUS READING PROTECTION
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteScheduledAction(@PathVariable UUID id) {
-        String message = scheduledActionService.deleteScheduledAction(id);
-        if (message.equals("The scheduled action with that id does not exist")) {
-            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        String result = scheduledActionService.deleteScheduledAction(id);
+        if (result.equals("NOT_FOUND")) {
+            return new ResponseEntity<>("The scheduled action with that id does not exist", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        if (result.equals("HAS_READINGS")) {
+            return new ResponseEntity<>("That scheduled action has status readings, delete them first", HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>("Scheduled action deleted successfully", HttpStatus.OK);
     }
 }

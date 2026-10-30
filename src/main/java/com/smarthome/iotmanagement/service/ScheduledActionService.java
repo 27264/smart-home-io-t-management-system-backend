@@ -12,6 +12,7 @@ import com.smarthome.iotmanagement.model.SmartDevice;
 import com.smarthome.iotmanagement.repository.ControllerRepository;
 import com.smarthome.iotmanagement.repository.ScheduledActionRepository;
 import com.smarthome.iotmanagement.repository.SmartDeviceRepository;
+import com.smarthome.iotmanagement.repository.StatusReadingRepository;
 
 @Service
 public class ScheduledActionService {
@@ -19,17 +20,19 @@ public class ScheduledActionService {
     private final ScheduledActionRepository scheduledActionRepository;
     private final SmartDeviceRepository smartDeviceRepository;
     private final ControllerRepository controllerRepository;
+    private final StatusReadingRepository statusReadingRepository;
 
     public ScheduledActionService(
             ScheduledActionRepository scheduledActionRepository,
             SmartDeviceRepository smartDeviceRepository,
-            ControllerRepository controllerRepository) {
+            ControllerRepository controllerRepository,
+            StatusReadingRepository statusReadingRepository) {
         this.scheduledActionRepository = scheduledActionRepository;
         this.smartDeviceRepository = smartDeviceRepository;
         this.controllerRepository = controllerRepository;
+        this.statusReadingRepository = statusReadingRepository;
     }
 
-    // D1 - SAVE SCHEDULED ACTION
     public ScheduledAction saveScheduledAction(ScheduledAction scheduledAction) {
         scheduledAction.setStatus(ActionStatus.PLANNED);
         if (scheduledAction.getSmartDevice() != null && scheduledAction.getSmartDevice().getId() != null) {
@@ -43,7 +46,6 @@ public class ScheduledActionService {
         return scheduledActionRepository.save(scheduledAction);
     }
 
-    // D1 - CHECK DUPLICATE CONTROLLER + DATE
     public boolean controllerAlreadyHasAction(UUID controllerId, LocalDate actionDate) {
         return scheduledActionRepository.existsByControllerIdAndActionDateAndStatusNot(
                 controllerId, actionDate, ActionStatus.ABORTED);
@@ -57,7 +59,6 @@ public class ScheduledActionService {
         return scheduledActionRepository.findById(id);
     }
 
-    // GENERAL UPDATE - STATUS MUST NOT CHANGE HERE
     public ScheduledAction updateScheduledAction(UUID id, ScheduledAction scheduledActionDetails) {
         Optional<ScheduledAction> existingScheduledAction = scheduledActionRepository.findById(id);
         if (existingScheduledAction.isEmpty()) {
@@ -77,12 +78,16 @@ public class ScheduledActionService {
         return scheduledActionRepository.save(scheduledAction);
     }
 
+    // E3 - DELETE WITH STATUS READING PROTECTION
     public String deleteScheduledAction(UUID id) {
         if (!scheduledActionRepository.existsById(id)) {
-            return "The scheduled action with that id does not exist";
+            return "NOT_FOUND";
+        }
+        if (statusReadingRepository.existsByScheduledActionId(id)) {
+            return "HAS_READINGS";
         }
         scheduledActionRepository.deleteById(id);
-        return "Scheduled action deleted successfully";
+        return "SUCCESS";
     }
 
     public List<ScheduledAction> getScheduledActionsByStatus(ActionStatus status) {
@@ -93,7 +98,6 @@ public class ScheduledActionService {
         return scheduledActionRepository.findByActionDateBetweenOrderByActionDateAsc(start, end);
     }
 
-    // D2 - CHANGE STATUS
     public String changeStatus(UUID id, ActionStatus newStatus) {
         Optional<ScheduledAction> optionalAction = scheduledActionRepository.findById(id);
         if (optionalAction.isEmpty()) {
