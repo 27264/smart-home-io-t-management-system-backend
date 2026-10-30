@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import com.smarthome.iotmanagement.model.ActionStatus;
+import com.smarthome.iotmanagement.model.Controller;
 import com.smarthome.iotmanagement.model.ScheduledAction;
 import com.smarthome.iotmanagement.model.SmartDevice;
-import com.smarthome.iotmanagement.model.Controller;
 import com.smarthome.iotmanagement.repository.ControllerRepository;
 import com.smarthome.iotmanagement.repository.ScheduledActionRepository;
 import com.smarthome.iotmanagement.repository.SmartDeviceRepository;
@@ -29,7 +29,9 @@ public class ScheduledActionService {
         this.controllerRepository = controllerRepository;
     }
 
+    // D1 - SAVE SCHEDULED ACTION
     public ScheduledAction saveScheduledAction(ScheduledAction scheduledAction) {
+        scheduledAction.setStatus(ActionStatus.PLANNED);
         if (scheduledAction.getSmartDevice() != null && scheduledAction.getSmartDevice().getId() != null) {
             Optional<SmartDevice> smartDevice = smartDeviceRepository.findById(scheduledAction.getSmartDevice().getId());
             smartDevice.ifPresent(scheduledAction::setSmartDevice);
@@ -41,6 +43,12 @@ public class ScheduledActionService {
         return scheduledActionRepository.save(scheduledAction);
     }
 
+    // D1 - CHECK DUPLICATE CONTROLLER + DATE
+    public boolean controllerAlreadyHasAction(UUID controllerId, LocalDate actionDate) {
+        return scheduledActionRepository.existsByControllerIdAndActionDateAndStatusNot(
+                controllerId, actionDate, ActionStatus.ABORTED);
+    }
+
     public List<ScheduledAction> getAllScheduledActions() {
         return scheduledActionRepository.findAll();
     }
@@ -49,14 +57,14 @@ public class ScheduledActionService {
         return scheduledActionRepository.findById(id);
     }
 
+    // GENERAL UPDATE - STATUS MUST NOT CHANGE HERE
     public ScheduledAction updateScheduledAction(UUID id, ScheduledAction scheduledActionDetails) {
-        Optional<ScheduledAction> existing = scheduledActionRepository.findById(id);
-        if (existing.isEmpty()) {
+        Optional<ScheduledAction> existingScheduledAction = scheduledActionRepository.findById(id);
+        if (existingScheduledAction.isEmpty()) {
             return null;
         }
-        ScheduledAction scheduledAction = existing.get();
+        ScheduledAction scheduledAction = existingScheduledAction.get();
         scheduledAction.setActionDate(scheduledActionDetails.getActionDate());
-        scheduledAction.setStatus(scheduledActionDetails.getStatus());
         scheduledAction.setCommand(scheduledActionDetails.getCommand());
         if (scheduledActionDetails.getSmartDevice() != null && scheduledActionDetails.getSmartDevice().getId() != null) {
             Optional<SmartDevice> smartDevice = smartDeviceRepository.findById(scheduledActionDetails.getSmartDevice().getId());
@@ -77,13 +85,40 @@ public class ScheduledActionService {
         return "Scheduled action deleted successfully";
     }
 
-    // B2 - FIND BY STATUS
     public List<ScheduledAction> getScheduledActionsByStatus(ActionStatus status) {
         return scheduledActionRepository.findByStatusOrderByActionDateAsc(status);
     }
 
-    // B3 - FIND BETWEEN DATES
     public List<ScheduledAction> getScheduledActionsBetweenDates(LocalDate start, LocalDate end) {
         return scheduledActionRepository.findByActionDateBetweenOrderByActionDateAsc(start, end);
+    }
+
+    // D2 - CHANGE STATUS
+    public String changeStatus(UUID id, ActionStatus newStatus) {
+        Optional<ScheduledAction> optionalAction = scheduledActionRepository.findById(id);
+        if (optionalAction.isEmpty()) {
+            return "NOT_FOUND";
+        }
+        ScheduledAction action = optionalAction.get();
+        ActionStatus currentStatus = action.getStatus();
+        boolean allowed = false;
+
+        if (currentStatus == ActionStatus.PLANNED) {
+            if (newStatus == ActionStatus.QUEUED || newStatus == ActionStatus.ABORTED) {
+                allowed = true;
+            }
+        } else if (currentStatus == ActionStatus.QUEUED) {
+            if (newStatus == ActionStatus.EXECUTED || newStatus == ActionStatus.ABORTED) {
+                allowed = true;
+            }
+        }
+
+        if (!allowed) {
+            return "Cannot change status from " + currentStatus + " to " + newStatus;
+        }
+
+        action.setStatus(newStatus);
+        scheduledActionRepository.save(action);
+        return "SUCCESS";
     }
 }

@@ -14,4 +14,10 @@ public interface ScheduledActionRepository extends JpaRepository<ScheduledAction
 
     // B3 - FIND BETWEEN DATES
     List<ScheduledAction> findByActionDateBetweenOrderByActionDateAsc(LocalDate start, LocalDate end);
+
+    // D1 - CHECK IF CONTROLLER ALREADY HAS A NON-ABORTED ACTION ON SAME DATE
+    boolean existsByControllerIdAndActionDateAndStatusNot(
+            UUID controllerId,
+            LocalDate actionDate,
+            ActionStatus status);
 }

@@ -21,8 +21,19 @@ public class ScheduledActionController {
         this.scheduledActionService = scheduledActionService;
     }
 
+    // D1 - SAFE SAVE
     @PostMapping("/save")
     public ResponseEntity<String> saveScheduledAction(@RequestBody ScheduledAction scheduledAction) {
+        if (scheduledAction.getActionDate().isBefore(LocalDate.now())) {
+            return new ResponseEntity<>("Scheduled action date cannot be in the past", HttpStatus.BAD_REQUEST);
+        }
+        if (scheduledAction.getController() != null && scheduledAction.getController().getId() != null) {
+            boolean alreadyExists = scheduledActionService.controllerAlreadyHasAction(
+                    scheduledAction.getController().getId(), scheduledAction.getActionDate());
+            if (alreadyExists) {
+                return new ResponseEntity<>("Controller already has an action scheduled on that date", HttpStatus.CONFLICT);
+            }
+        }
         scheduledActionService.saveScheduledAction(scheduledAction);
         return new ResponseEntity<>("Scheduled action saved successfully", HttpStatus.CREATED);
     }
@@ -32,18 +43,29 @@ public class ScheduledActionController {
         return new ResponseEntity<>(scheduledActionService.getAllScheduledActions(), HttpStatus.OK);
     }
 
-    // B2 - FIND BY STATUS
     @GetMapping("/by-status")
     public ResponseEntity<List<ScheduledAction>> getScheduledActionsByStatus(@RequestParam ActionStatus status) {
         return new ResponseEntity<>(scheduledActionService.getScheduledActionsByStatus(status), HttpStatus.OK);
     }
 
-    // B3 - FIND BETWEEN DATES
     @GetMapping("/between")
     public ResponseEntity<List<ScheduledAction>> getScheduledActionsBetweenDates(@RequestParam String start, @RequestParam String end) {
         LocalDate startDate = LocalDate.parse(start);
         LocalDate endDate = LocalDate.parse(end);
         return new ResponseEntity<>(scheduledActionService.getScheduledActionsBetweenDates(startDate, endDate), HttpStatus.OK);
+    }
+
+    // D2 - CHANGE STATUS
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> changeStatus(@PathVariable UUID id, @RequestParam ActionStatus status) {
+        String result = scheduledActionService.changeStatus(id, status);
+        if (result.equals("NOT_FOUND")) {
+            return new ResponseEntity<>("The scheduled action with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        if (!result.equals("SUCCESS")) {
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Scheduled action status updated successfully", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

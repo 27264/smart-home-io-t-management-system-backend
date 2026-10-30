@@ -1,6 +1,7 @@
 package com.smarthome.iotmanagement.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,7 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
             ORDER BY r.roomNumber ASC
             """)
     List<Room> findFreeRooms();
+
+    // D4 - DERIVED
+    Optional<Room> findByRoomNumber(int roomNumber);
 }

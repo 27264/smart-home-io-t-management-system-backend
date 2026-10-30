@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.smarthome.iotmanagement.model.Controller;
+import com.smarthome.iotmanagement.model.Room;
 
 public interface ControllerRepository extends JpaRepository<Controller, UUID> {
 
@@ -17,4 +18,7 @@ public interface ControllerRepository extends JpaRepository<Controller, UUID> {
             WHERE LOWER(p.name) = LOWER(:name)
             """)
     List<Controller> findControllersByProtocolName(@Param("name") String name);
+
+    // D4 - DERIVED
+    boolean existsByRoom(Room room);
 }
